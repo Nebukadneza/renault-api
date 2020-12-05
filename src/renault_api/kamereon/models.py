@@ -443,6 +443,9 @@ class KamereonVehicleHvacSessionsData(KamereonVehicleDataAttributes):
 class KamereonVehicleHvacStartActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data hvac-start attributes."""
 
+@dataclass
+class KamereonVehicleHvacScheduleActionData(KamereonVehicleDataAttributes):
+    """Kamereon vehicle action data hvac-schedule attributes."""
 
 @dataclass
 class KamereonVehicleChargeScheduleActionData(KamereonVehicleDataAttributes):

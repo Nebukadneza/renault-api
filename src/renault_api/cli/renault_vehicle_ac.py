@@ -8,6 +8,7 @@ import dateparser
 from tabulate import tabulate
 
 from . import renault_vehicle
+from renault_api.kamereon.models import HvacSchedule
 
 
 async def start(
@@ -81,10 +82,31 @@ async def schedule(
         websession=websession, ctx_data=ctx_data
     )
     response = await vehicle.get_hvac_settings()
-    click.echo(f"Schedule mode is: {response.mode}")
+    ctx_data['hvac_schedule'] = response
+
+async def set_active_state(
+    websession: aiohttp.ClientSession,
+    ctx_data: Dict[str, Any],
+    id: int,
+    state: bool
+) -> None:
+    """Activate given schedule."""
+    vehicle = await renault_vehicle.get_vehicle(
+        websession=websession, ctx_data=ctx_data
+    )
+    schedules = ctx_data['hvac_schedule'].schedules
+    for s in schedules:
+        if s.id != id:
+            continue
+        s.activated = state
+    await vehicle.set_hvac_schedules(schedules)
+
+def print_schedule(hvac_schedule):
+    click.echo(f"Schedule mode is: {hvac_schedule.mode}")
     headers = ["Nr.", "Active", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     table_data = []
-    for schedule in response.schedules:
+    import pprint; pprint.pprint(hvac_schedule.__dict__)
+    for schedule in hvac_schedule.schedules:
         row = [schedule.id, schedule.activated]
         for day in [schedule.monday, schedule.tuesday, schedule.wednesday, schedule.thursday, schedule.friday, schedule.saturday, schedule.sunday]:
             if day is not None:
@@ -92,5 +114,4 @@ async def schedule(
             else:
                 row.append("---")
         table_data.append(row)
-
     click.echo(tabulate(table_data, headers=headers))

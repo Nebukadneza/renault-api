@@ -92,6 +92,9 @@ KamereonVehicleHvacStartActionDataSchema = marshmallow_dataclass.class_schema(
     models.KamereonVehicleHvacStartActionData, base_schema=BaseSchema
 )()
 
+KamereonVehicleHvacScheduleActionDataSchema = marshmallow_dataclass.class_schema(
+    models.KamereonVehicleHvacScheduleActionData, base_schema=BaseSchema
+)()
 
 KamereonVehicleChargeScheduleActionDataSchema = marshmallow_dataclass.class_schema(
     models.KamereonVehicleChargeScheduleActionData, base_schema=BaseSchema

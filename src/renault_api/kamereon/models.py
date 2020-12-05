@@ -359,6 +359,46 @@ class ChargeSchedule(BaseModel):
             "sunday": self.sunday.for_json() if self.sunday else {},
         }
 
+@dataclass
+class HvacDaySchedule(BaseModel):
+    """Kamereon vehicle hvac schedule for day."""
+
+    readyAtTime: Optional[str]  # noqa: N815
+
+    def for_json(self) -> Dict[str, Any]:
+        """Create dict for json."""
+        return {
+            "readyAtTime": self.readyAtTime,
+        }
+
+
+@dataclass
+class HvacSchedule(BaseModel):
+    """Kamereon vehicle hvac schedule for week."""
+
+    id: Optional[int]
+    activated: Optional[bool]
+    monday: Optional[HvacDaySchedule]
+    tuesday: Optional[HvacDaySchedule]
+    wednesday: Optional[HvacDaySchedule]
+    thursday: Optional[HvacDaySchedule]
+    friday: Optional[HvacDaySchedule]
+    saturday: Optional[HvacDaySchedule]
+    sunday: Optional[HvacDaySchedule]
+
+    def for_json(self) -> Dict[str, Any]:
+        """Create dict for json."""
+        return {
+            "id": self.id,
+            "activated": self.activated,
+            "monday": self.monday.for_json() if self.monday else {},
+            "tuesday": self.tuesday.for_json() if self.tuesday else {},
+            "wednesday": self.wednesday.for_json() if self.wednesday else {},
+            "thursday": self.thursday.for_json() if self.thursday else {},
+            "friday": self.friday.for_json() if self.friday else {},
+            "saturday": self.saturday.for_json() if self.saturday else {},
+            "sunday": self.sunday.for_json() if self.sunday else {},
+        }
 
 @dataclass
 class KamereonVehicleChargingSettingsData(KamereonVehicleDataAttributes):
@@ -367,6 +407,12 @@ class KamereonVehicleChargingSettingsData(KamereonVehicleDataAttributes):
     mode: Optional[str]
     schedules: Optional[List[ChargeSchedule]]
 
+@dataclass
+class KamereonVehicleHvacSettingsData(KamereonVehicleDataAttributes):
+    """Kamereon vehicle data hvac-settings (mode+schedules) attributes."""
+
+    mode: Optional[str]
+    schedules: Optional[List[HvacSchedule]]
 
 @dataclass
 class KamereonVehicleNotificationSettingsData(KamereonVehicleDataAttributes):
@@ -402,11 +448,17 @@ class KamereonVehicleHvacStartActionData(KamereonVehicleDataAttributes):
 class KamereonVehicleChargeScheduleActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data charge-schedule attributes."""
 
+@dataclass
+class KamereonVehicleHvacScheduleActionData(KamereonVehicleDataAttributes):
+    """Kamereon vehicle action data hvac-schedule attributes."""
 
 @dataclass
 class KamereonVehicleChargeModeActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data charge-mode attributes."""
 
+@dataclass
+class KamereonVehicleHvacModeActionData(KamereonVehicleDataAttributes):
+    """Kamereon vehicle action data hvac-mode attributes."""
 
 @dataclass
 class KamereonVehicleChargingStartActionData(KamereonVehicleDataAttributes):

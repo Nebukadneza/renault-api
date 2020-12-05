@@ -101,6 +101,7 @@ async def display_status(
     await update_cockpit(vehicle, status_table)
     await update_location(vehicle, status_table)
     await update_hvac_status(vehicle, status_table)
+    await update_hvac_settings(vehicle, status_table)
 
     click.echo(tabulate(status_table.items()))
 
@@ -210,6 +211,23 @@ async def update_location(
         for key, value, unit in items:
             update_status_table(status_table, key, value, unit)
 
+async def update_hvac_settings(
+    vehicle: RenaultVehicle, status_table: Dict[str, str]
+) -> None:
+    """Update status table from get_vehicle_hvac_status."""
+    try:
+        response = await vehicle.get_hvac_settings()
+    except QuotaLimitException as exc:
+        raise click.ClickException(repr(exc)) from exc
+    except KamereonResponseException as exc:
+        click.echo(f"hvac-settings: {exc.error_details}", err=True)
+    else:
+        items = [
+            ("HVAC schedule mode", response.mode, None),
+        ]
+
+        for key, value, unit in items:
+            update_status_table(status_table, key, value, unit)
 
 async def update_hvac_status(
     vehicle: RenaultVehicle, status_table: Dict[str, str]

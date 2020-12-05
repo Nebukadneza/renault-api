@@ -5,6 +5,7 @@ from typing import Dict
 import aiohttp
 import click
 import dateparser
+from tabulate import tabulate
 
 from . import renault_vehicle
 
@@ -70,3 +71,26 @@ async def sessions(
         start=dateparser.parse(start), end=dateparser.parse(end)
     )
     click.echo(response.raw_data)
+
+async def schedule(
+    websession: aiohttp.ClientSession,
+    ctx_data: Dict[str, Any],
+) -> None:
+    """Show or edit AC schedules."""
+    vehicle = await renault_vehicle.get_vehicle(
+        websession=websession, ctx_data=ctx_data
+    )
+    response = await vehicle.get_hvac_settings()
+    click.echo(f"Schedule mode is: {response.mode}")
+    headers = ["Nr.", "Active", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    table_data = []
+    for schedule in response.schedules:
+        row = [schedule.id, schedule.activated]
+        for day in [schedule.monday, schedule.tuesday, schedule.wednesday, schedule.thursday, schedule.friday, schedule.saturday, schedule.sunday]:
+            if day is not None:
+                row.append(day.readyAtTime)
+            else:
+                row.append("---")
+        table_data.append(row)
+
+    click.echo(tabulate(table_data, headers=headers))

@@ -26,6 +26,7 @@ DATA_ENDPOINTS = {
     "hvac-history": {"version": 1},
     "hvac-sessions": {"version": 1},
     "hvac-status": {"version": 1},
+    "hvac-settings": {"version": 1},
     "lock-status": {"version": 1},
     "notification-settings": {"version": 1},
 }

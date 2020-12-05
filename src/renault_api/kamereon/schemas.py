@@ -59,6 +59,9 @@ KamereonVehicleChargingSettingsDataSchema = marshmallow_dataclass.class_schema(
     models.KamereonVehicleChargingSettingsData, base_schema=BaseSchema
 )()
 
+KamereonVehicleHvacSettingsDataSchema = marshmallow_dataclass.class_schema(
+    models.KamereonVehicleHvacSettingsData, base_schema=BaseSchema
+)()
 
 KamereonVehicleNotificationSettingsDataSchema = marshmallow_dataclass.class_schema(
     models.KamereonVehicleNotificationSettingsData, base_schema=BaseSchema

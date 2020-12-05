@@ -112,6 +112,18 @@ class RenaultVehicle:
             response.get_attributes(schemas.KamereonVehicleHvacStatusDataSchema),
         )
 
+    async def get_hvac_settings(self) -> models.KamereonVehicleHvacSettingsData:
+        """Get vehicle hvac settings (schedule+mode)."""
+        response = await self.session.get_vehicle_data(
+            account_id=self.account_id,
+            vin=self.vin,
+            endpoint="hvac-settings",
+        )
+        return cast(
+            models.KamereonVehicleHvacSettingsData,
+            response.get_attributes(schemas.KamereonVehicleHvacSettingsDataSchema),
+        )
+
     async def get_charge_mode(self) -> models.KamereonVehicleChargeModeData:
         """Get vehicle charge mode."""
         response = await self.session.get_vehicle_data(

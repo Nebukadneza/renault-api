@@ -192,6 +192,44 @@ async def ac_start(ctx: Context, temperature: int, at: Optional[str]) -> None:
             await websession.close()
             await closed_event.wait()
 
+@main.command()
+@click.group(invoke_without_command=True)
+@click.pass_context
+@coro  # type: ignore
+async def ac_schedule(ctx: Context) -> None:
+    """Show or edit AC schedules."""
+    async with ClientSession() as websession:
+        try:
+            await renault_vehicle_ac.schedule(
+                websession=websession,
+                ctx_data=ctx.obj,
+            )
+        except RenaultException as exc:
+            raise click.ClickException(str(exc)) from exc
+        finally:
+            closed_event = create_aiohttp_closed_event(websession)
+            await websession.close()
+            await closed_event.wait()
+
+@ac_schedule.command()
+@click.pass_context
+@coro  # type: ignore
+async def activate(ctx: Context) -> None:
+    """Enable or disable a schedule/program"""
+    async with ClientSession() as websession:
+        try:
+            await renault_vehicle_ac.schedule(
+                websession=websession,
+                ctx_data=ctx.obj,
+            )
+        except RenaultException as exc:
+            raise click.ClickException(str(exc)) from exc
+        finally:
+            closed_event = create_aiohttp_closed_event(websession)
+            await websession.close()
+            await closed_event.wait()
+
+
 
 @main.command()
 @click.pass_context

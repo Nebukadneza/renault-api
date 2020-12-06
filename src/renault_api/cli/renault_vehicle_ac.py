@@ -2,6 +2,7 @@
 from typing import Any
 from typing import Dict
 
+import re
 import aiohttp
 import click
 import dateparser
@@ -109,6 +110,20 @@ async def set_entry(
     time: str
 ) -> None:
     """Activate given schedule."""
+    if not day in ["monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"]:
+        click.echo("Error: DAY must be one of monday..sunday.")
+        return
+
+    if not re.match('T\d\d:\d\dZ', time) and time != '':
+        click.echo("Error: TIME must be in weird-ass 'T<1..24, h>:<0..60, m>Z' (military zulu) format, or empty string. For example 'T18:30Z' or ''.")
+        return
+
     vehicle = await renault_vehicle.get_vehicle(
         websession=websession, ctx_data=ctx_data
     )

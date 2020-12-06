@@ -211,6 +211,7 @@ async def update_location(
         for key, value, unit in items:
             update_status_table(status_table, key, value, unit)
 
+
 async def update_hvac_settings(
     vehicle: RenaultVehicle, status_table: Dict[str, str]
 ) -> None:
@@ -228,6 +229,7 @@ async def update_hvac_settings(
 
         for key, value, unit in items:
             update_status_table(status_table, key, value, unit)
+
 
 async def update_hvac_status(
     vehicle: RenaultVehicle, status_table: Dict[str, str]

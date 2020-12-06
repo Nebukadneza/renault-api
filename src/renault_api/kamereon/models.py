@@ -359,6 +359,7 @@ class ChargeSchedule(BaseModel):
             "sunday": self.sunday.for_json() if self.sunday else {},
         }
 
+
 @dataclass
 class HvacDaySchedule(BaseModel):
     """Kamereon vehicle hvac schedule for day."""
@@ -392,16 +393,19 @@ class HvacSchedule(BaseModel):
             "id": self.id,
             "activated": self.activated,
         }
-        for day in ["monday",
+        for day in [
+            "monday",
             "tuesday",
             "wednesday",
             "thursday",
             "friday",
             "saturday",
-            "sunday"]:
+            "sunday",
+        ]:
             if self.__dict__.get(day):
                 ret[day] = self.__dict__[day].for_json()
         return ret
+
 
 @dataclass
 class KamereonVehicleChargingSettingsData(KamereonVehicleDataAttributes):
@@ -410,12 +414,14 @@ class KamereonVehicleChargingSettingsData(KamereonVehicleDataAttributes):
     mode: Optional[str]
     schedules: Optional[List[ChargeSchedule]]
 
+
 @dataclass
 class KamereonVehicleHvacSettingsData(KamereonVehicleDataAttributes):
     """Kamereon vehicle data hvac-settings (mode+schedules) attributes."""
 
     mode: Optional[str]
     schedules: Optional[List[HvacSchedule]]
+
 
 @dataclass
 class KamereonVehicleNotificationSettingsData(KamereonVehicleDataAttributes):
@@ -446,25 +452,31 @@ class KamereonVehicleHvacSessionsData(KamereonVehicleDataAttributes):
 class KamereonVehicleHvacStartActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data hvac-start attributes."""
 
+
 @dataclass
 class KamereonVehicleHvacScheduleActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data hvac-schedule attributes."""
+
 
 @dataclass
 class KamereonVehicleChargeScheduleActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data charge-schedule attributes."""
 
+
 @dataclass
 class KamereonVehicleHvacScheduleActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data hvac-schedule attributes."""
+
 
 @dataclass
 class KamereonVehicleChargeModeActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data charge-mode attributes."""
 
+
 @dataclass
 class KamereonVehicleHvacModeActionData(KamereonVehicleDataAttributes):
     """Kamereon vehicle action data hvac-mode attributes."""
+
 
 @dataclass
 class KamereonVehicleChargingStartActionData(KamereonVehicleDataAttributes):

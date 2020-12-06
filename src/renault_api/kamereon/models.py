@@ -388,17 +388,20 @@ class HvacSchedule(BaseModel):
 
     def for_json(self) -> Dict[str, Any]:
         """Create dict for json."""
-        return {
+        ret = {
             "id": self.id,
             "activated": self.activated,
-            "monday": self.monday.for_json() if self.monday else {},
-            "tuesday": self.tuesday.for_json() if self.tuesday else {},
-            "wednesday": self.wednesday.for_json() if self.wednesday else {},
-            "thursday": self.thursday.for_json() if self.thursday else {},
-            "friday": self.friday.for_json() if self.friday else {},
-            "saturday": self.saturday.for_json() if self.saturday else {},
-            "sunday": self.sunday.for_json() if self.sunday else {},
         }
+        for day in ["monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"]:
+            if self.__dict__.get(day):
+                ret[day] = self.__dict__[day].for_json()
+        return ret
 
 @dataclass
 class KamereonVehicleChargingSettingsData(KamereonVehicleDataAttributes):

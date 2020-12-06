@@ -86,8 +86,9 @@ async def request(
     ) as http_response:
         response_text = await http_response.text()
         _LOGGER.debug(
-            "Received Kamereon response %s on %s: %s",
+            "Received Kamereon response %s on %s %s: %s",
             http_response.status,
+            method,
             http_response.url,
             response_text,
         )

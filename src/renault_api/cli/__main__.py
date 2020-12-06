@@ -218,7 +218,7 @@ async def activate(ctx: Context, id: int) -> None:
     """Activate the schedule by 'id', where 'id' is in 1..5."""
     async with ClientSession() as websession:
         try:
-            await renault_vehicle_ac.activate(
+            await renault_vehicle_ac.set_active_state(
                     websession=websession,
                     ctx_data=ctx.obj,
                     id=int(id),
@@ -244,6 +244,30 @@ async def deactivate(ctx: Context, id: int) -> None:
                     ctx_data=ctx.obj,
                     id=int(id),
                     state=False
+            )
+        except RenaultException as exc:
+            raise click.ClickException(str(exc)) from exc
+        finally:
+            closed_event = create_aiohttp_closed_event(websession)
+            await websession.close()
+            await closed_event.wait()
+
+@click.argument("time")
+@click.argument("day")
+@click.argument("id")
+@ac_schedule.command()
+@click.pass_context
+@coro  # type: ignore
+async def set(ctx: Context, id: int, day: str, time: str) -> None:
+    """Set a entry at the given day and time, for schedule 'id'."""
+    async with ClientSession() as websession:
+        try:
+            await renault_vehicle_ac.set_entry(
+                    websession=websession,
+                    ctx_data=ctx.obj,
+                    id=int(id),
+                    day=day,
+                    time=time
             )
         except RenaultException as exc:
             raise click.ClickException(str(exc)) from exc
